@@ -33,8 +33,8 @@ def save_json_file(log):
 
 if __name__ == '__main__':
     # 学号密码
-    username = "16605407609"
-    password = "Liming2002"
+    username = ""
+    password = ""
     # 想要的房间座位
     room_id = 4
     perfer_seat = [137, 113, 125, 120, 132, 144]
