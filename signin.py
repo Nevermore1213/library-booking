@@ -13,8 +13,8 @@ def json_to_dict(json_file):
     #print(dict)
     return dict
 #---------------配置区--------------------#
-username = '16605407609'
-password = 'Liming2002'
+username = ''
+password = ''
 #---------------配置区--------------------#
 #获取当前签到日期
 signin_time = datetime.datetime.now().date()
