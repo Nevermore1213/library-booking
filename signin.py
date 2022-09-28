@@ -2,21 +2,34 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import logging
 import datetime
+import json
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+def json_to_dict(json_file):
+    f = open(json_file,'r',encoding='utf-8')
+    dict = json.load(f)
+    #print(dict)
+    return dict
+#---------------配置区--------------------#
 username = '16605407609'
 password = 'Liming2002'
+#---------------配置区--------------------#
 #获取当前签到日期
 signin_time = datetime.datetime.now().date()
-#读取座位id构造签到网址
-f = open(f'{signin_time}.txt',encoding='utf-8')
-id = ''
-for i in f:
-    id += i
-Seat = int(id)
-seat = 100455976 + Seat
+#构造对应json文件路径
+json_file = 'Booking/'+ str(signin_time) +'.json'
+dict = json_to_dict(json_file)
+
+#获取当前hour判断am or pm，从而输出正确的id
+now_time = datetime.datetime.now().hour
+if (now_time < int(12)):
+    id = dict[0]['am']
+else:
+    id = dict[1]['pm']
+
+seat = 100455976 + int(id)
 url = 'http://update.unifound.net/wxnotice/s.aspx?c=100455521_Seat_'+str(seat)+'_1KD'
 logger.info(f'座位ID为：{id}')
 #logger.info(f'换算网址为：{url}')
