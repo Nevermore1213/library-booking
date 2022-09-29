@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 def learn_time():
     # 提前一天预约
     timestamp = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
-    learn_am = ""
-    duration_am = 0
-    learn_pm = "15:00"
-    duration_pm = 360
+    learn_am = "9:00"
+    duration_am = 30
+    learn_pm = "17:00"
+    duration_pm = 30
     time_str = [[(str(timestamp) + ' ' + learn_am),duration_am],[(str(timestamp) + ' ' + learn_pm),duration_pm]]
     return time_str
     # print(timestamp)
@@ -25,7 +25,8 @@ def save_json_file(log):
     :param log:
     :return:
     '''
-    booking_time = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+    #booking_time = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+    booking_time = (datetime.datetime.now() ).date()
     txt = json.dumps(log, indent=2, ensure_ascii=False)
     with open(f'Booking/{booking_time}.json', 'w' ,encoding='utf-8') as f:
         f.write(txt)
@@ -56,17 +57,19 @@ if __name__ == '__main__':
     person.login()
     #log列表储存上午、下午两个时间段的预约信息 [{'am':'008'},{'pm':'009'}]
     log = []
+    print(time_str)
     for i in time_str:
         '''
         i[0] 开始时间
         i[1] 持续时间
         '''
-        seatInfo = person.queryRoom(person.showRoom(room_id), perfer_seat, i[0] , i[1])
+        seatInfo = person.queryRoom(person.showRoom(room_id), perfer_seat, str(i[0]) , i[1])
         if seatInfo is None:
             logger.warning("找不到位置")
             exit(0)
         print(f"查询到 {seatInfo['name']} 位置满足要求")
-        person.submit(seatInfo, time_str, i[1])
+        duration = i[1]
+        person.submit(seatInfo, str(i[0]), duration)
 
         if i[0] == '7:00':
             get_time_duration = 'am'
