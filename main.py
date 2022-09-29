@@ -67,16 +67,17 @@ if __name__ == '__main__':
         seatInfo = person.queryRoom(person.showRoom(room_id), perfer_seat, str(i[0]) , i[1])
         if seatInfo is None:
             logger.warning("找不到位置")
-            exit(0)
-        print(f"查询到 {seatInfo['name']} 位置满足要求")
-        duration = i[1]
-        person.submit(seatInfo, str(i[0]), duration)
-
+            seat_id = ' '
+        else:
+            print(f"查询到 {seatInfo['name']} 位置满足要求")
+            duration = i[1]
+            person.submit(seatInfo, str(i[0]), duration)
+            seat_id = str(seatInfo['name'][-3:])
         if i[2] == 'am':
             get_time_duration = 'am'
         else:
             get_time_duration = 'pm'
 
-        dict = {get_time_duration:str(seatInfo['name'][-3:])}
+        dict = {get_time_duration:seat_id}
         log.append(dict)
     save_json_file(log)
