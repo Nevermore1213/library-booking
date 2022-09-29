@@ -13,10 +13,10 @@ def learn_time():
     timestamp = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
     #timestamp = (datetime.datetime.now() ).date()
     learn_am = "9:00"
-    duration_am = 30
-    learn_pm = "17:00"
-    duration_pm = 3
-    time_str = [[(str(timestamp) + ' ' + learn_am),duration_am],[(str(timestamp) + ' ' + learn_pm),duration_pm]]
+    duration_am = 350
+    learn_pm = "15:00"
+    duration_pm = 350
+    time_str = [[(str(timestamp) + ' ' + learn_pm),duration_pm,'pm'],[(str(timestamp) + ' ' + learn_am),duration_am,'am']]
     return time_str
     # print(timestamp)
 
@@ -72,7 +72,7 @@ if __name__ == '__main__':
         duration = i[1]
         person.submit(seatInfo, str(i[0]), duration)
 
-        if i[0] == '7:00':
+        if i[2] == 'am':
             get_time_duration = 'am'
         else:
             get_time_duration = 'pm'
