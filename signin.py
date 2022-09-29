@@ -28,6 +28,9 @@ if (now_time < int(12)):
     id = dict[0]['am']
 else:
     id = dict[1]['pm']
+#如果获取的座位id为空，则停止运行
+if id == ' ':
+    exit(0)
 
 seat = 100455976 + int(id)
 url = 'http://update.unifound.net/wxnotice/s.aspx?c=100455521_Seat_'+str(seat)+'_1KD'
