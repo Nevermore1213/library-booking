@@ -11,10 +11,11 @@ logger = logging.getLogger(__name__)
 def learn_time():
     # 提前一天预约
     timestamp = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+    #timestamp = (datetime.datetime.now() ).date()
     learn_am = "9:00"
     duration_am = 30
     learn_pm = "17:00"
-    duration_pm = 30
+    duration_pm = 3
     time_str = [[(str(timestamp) + ' ' + learn_am),duration_am],[(str(timestamp) + ' ' + learn_pm),duration_pm]]
     return time_str
     # print(timestamp)
@@ -25,8 +26,8 @@ def save_json_file(log):
     :param log:
     :return:
     '''
-    #booking_time = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
-    booking_time = (datetime.datetime.now() ).date()
+    booking_time = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
+    #booking_time = (datetime.datetime.now() ).date()
     txt = json.dumps(log, indent=2, ensure_ascii=False)
     with open(f'Booking/{booking_time}.json', 'w' ,encoding='utf-8') as f:
         f.write(txt)
@@ -34,8 +35,8 @@ def save_json_file(log):
 
 if __name__ == '__main__':
     # 学号密码
-    username = "16605407609"
-    password = "Liming2002"
+    username = ""
+    password = ""
     # 想要的房间座位
     room_id = 4
     perfer_seat = [137, 113, 125, 120, 132, 144]
