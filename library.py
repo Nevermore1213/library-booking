@@ -105,7 +105,10 @@ class Person:
                     return data[index]
 
             logger.warning("预设位置不满足!")
+        #顺序查询座位
         for index in range(len(data)):
+        #逆序查询座位
+        # for index in range(len(data)-1, 0, -1):
             if self.querySeatIsValid(data[index], start_str, duration):
                 return data[index]
 
