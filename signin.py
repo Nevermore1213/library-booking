@@ -25,9 +25,9 @@ dict = json_to_dict(json_file)
 #获取当前hour判断am or pm，从而输出正确的id
 now_time = datetime.datetime.now().hour
 if (now_time < int(12)):
-    id = dict[0]['am']
+    id = dict[1]['am']
 else:
-    id = dict[1]['pm']
+    id = dict[0]['pm']
 #如果获取的座位id为空，则停止运行
 if id == ' ':
     exit(0)
