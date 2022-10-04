@@ -16,7 +16,7 @@ def learn_time():
     duration_am = 350
     learn_pm = "15:00"
     duration_pm = 350
-    time_str = [[(str(timestamp) + ' ' + learn_pm),duration_pm,'pm'],[(str(timestamp) + ' ' + learn_am),duration_am,'am']]
+    time_str = [[(str(timestamp) + ' ' + learn_pm), duration_pm, 'pm'], [(str(timestamp) + ' ' + learn_am), duration_am, 'am']]
     return time_str
     # print(timestamp)
 
@@ -64,20 +64,24 @@ if __name__ == '__main__':
         i[0] 开始时间
         i[1] 持续时间
         '''
-        seatInfo = person.queryRoom(person.showRoom(room_id), perfer_seat, str(i[0]) , i[1])
-        if seatInfo is None:
-            logger.warning("找不到位置")
-            seat_id = ' '
-        else:
-            print(f"查询到 {seatInfo['name']} 位置满足要求")
-            duration = i[1]
-            person.submit(seatInfo, str(i[0]), duration)
-            seat_id = str(seatInfo['name'][-3:])
-        if i[2] == 'am':
-            get_time_duration = 'am'
-        else:
-            get_time_duration = 'pm'
+        try:
+            seatInfo = person.queryRoom(person.showRoom(room_id), perfer_seat, str(i[0]), i[1])
+            if seatInfo is None:
+                logger.warning("找不到位置")
+                seat_id = ' '
+            else:
+                print(f"查询到 {seatInfo['name']} 位置满足要求")
+                duration = i[1]
+                person.submit(seatInfo, str(i[0]), duration)
+                seat_id = str(seatInfo['name'][-3:])
+            if i[2] == 'am':
+                get_time_duration = 'am'
+            else:
+                get_time_duration = 'pm'
 
-        dict = {get_time_duration:seat_id}
-        log.append(dict)
+            dict = {get_time_duration: seat_id}
+            log.append(dict)
+        except:
+            logger.warning('设置时间错误')
+            pass
     save_json_file(log)
