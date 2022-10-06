@@ -1,3 +1,4 @@
+import bs4
 import requests, os, time, json, re, sys
 from bs4 import BeautifulSoup
 from MyUtil import *
@@ -148,7 +149,7 @@ class Person:
         :param room_id:
         :return: 房间序号
         '''
-        index = 0
+        #index = 0
         # for key in config.room:
         #     index += 1
         #     print(f'{index}) ' + key['area'] + key['name'])
@@ -218,8 +219,38 @@ class Person:
         msg = json.loads(response.text)['msg']
         print(msg)
 
+    def getInfo(self, room_id):
+        '''
+        获取房间内成员预约信息
+        :param room_id:
+        :return:
+        '''
+        roomId = self.showRoom(room_id)
+        now = time.localtime()
+        url = f"http://csyy.qdu.edu.cn:8080/ClientWeb/pro/ajax/device.aspx?byType=devcls&classkind=8&display=fp&md=d&room_id={roomId}&purpose=&selectOpenAty=&cld_name=default&date={now.tm_year}-{fmt02(now.tm_mon)}-{fmt02(now.tm_mday)}&fr_start=7%3A00&fr_end=22%3A00&act=get_rsv_sta&_={int(time.time() * 1000)}"
+        logger.info("正在查询房间")
+        print(config.room[room_id-1]['name'])
+        response = self.session.get(url)
+        data = json.loads(response.text)['data']
+        for seatData in data:
+            if seatData['state'] != 'close':
+                roomName = seatData['name']
+                print('--------------------------')
+                print(roomName)
+                ts = seatData['ts']
+                for student in ts :
+                    name = student['owner']
+                    accno = student['accno'] #可能与学号有关
+                    start = student['start']
+                    end = student['end']
+                    state = student['state']
+                    print(name, start, end, state)
 
     # 以下为可选
     # rsvIds = person.queryHistory() # 查询预约历史
     # if len(rsvIds) > 0:
     #     person.deleteSeat(rsvIds[0]) # 删除刚刚的预约
+if __name__ == '__main__':
+    test = Person('', '', 4)
+    test.login()
+    test.getInfo(4)
