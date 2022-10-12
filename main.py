@@ -43,7 +43,9 @@ if __name__ == '__main__':
     password = config.password
     room_id = config.room_id
     perfer_seat = config.perfer_seat
-    time_str = learn_time(config.time_tuple)
+    print(config.time_tuple[0])
+    print(config.time_tuple[1])
+    time_str = learn_time(*config.time_tuple)
     # -------------------------------#
     try:
         username = sys.argv[1]
