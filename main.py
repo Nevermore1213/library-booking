@@ -3,22 +3,43 @@ import logging
 import datetime
 import library
 import json
+import send_email
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
 
 # ------------配置区----------------#
 def learn_time():
     # 提前一天预约
     timestamp = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
-    #timestamp = (datetime.datetime.now() ).date()
+    # timestamp = (datetime.datetime.now() ).date()
     learn_am = "9:00"
     duration_am = 350
     learn_pm = "15:00"
     duration_pm = 350
-    time_str = [[(str(timestamp) + ' ' + learn_pm), duration_pm, 'pm'], [(str(timestamp) + ' ' + learn_am), duration_am, 'am']]
+    time_str = [[(str(timestamp) + ' ' + learn_pm), duration_pm, 'pm'],
+                [(str(timestamp) + ' ' + learn_am), duration_am, 'am']]
     return time_str
     # print(timestamp)
+
+
+def sendEMail(content):
+    '''
+
+    :param content: 邮件内容
+    :return:
+    '''
+    # 发件人-填写自己的邮箱
+    userName_SendMail = ''
+    # 邮箱发件授权码-为发件人生成的授权码
+    userName_AuthCode = ''
+    # 定义邮件的接收者
+    received_mail = ['']
+    #发送邮件
+    smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
+    smtp.send_msg()
+
 
 def save_json_file(log):
     '''
@@ -27,10 +48,12 @@ def save_json_file(log):
     :return:
     '''
     booking_time = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
-    #booking_time = (datetime.datetime.now() ).date()
+    # booking_time = (datetime.datetime.now() ).date()
     txt = json.dumps(log, indent=2, ensure_ascii=False)
-    with open(f'Booking/{booking_time}.json', 'w' ,encoding='utf-8') as f:
+    with open(f'Booking/{booking_time}.json', 'w', encoding='utf-8') as f:
         f.write(txt)
+    content = str(log)
+    sendEMail(f'预约成功！{booking_time} {content} ')
 
 
 if __name__ == '__main__':
@@ -39,7 +62,7 @@ if __name__ == '__main__':
     password = ""
     # 想要的房间座位
     room_id = 4
-    perfer_seat = [137, 113, 125, 120, 132, 144]
+    perfer_seat = []
 
     time_str = learn_time()
     # -------------------------------#
@@ -56,7 +79,7 @@ if __name__ == '__main__':
 
     person = library.Person(username, password, room_id)
     person.login()
-    #log列表储存上午、下午两个时间段的预约信息 [{'am':'008'},{'pm':'009'}]
+    # log列表储存上午、下午两个时间段的预约信息 [{'am':'008'},{'pm':'009'}]
     log = []
     print(time_str)
     for i in time_str:
@@ -82,6 +105,6 @@ if __name__ == '__main__':
             dict = {get_time_duration: seat_id}
             log.append(dict)
         except:
-            logger.warning('设置时间错误')
+            logger.warning('pass')
             pass
     save_json_file(log)

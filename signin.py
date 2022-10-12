@@ -3,40 +3,61 @@ from selenium.webdriver.common.by import By
 import logging
 import datetime
 import json
+import send_email
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+
 def json_to_dict(json_file):
-    f = open(json_file,'r',encoding='utf-8')
+    f = open(json_file, 'r', encoding='utf-8')
     dict = json.load(f)
-    #print(dict)
+    # print(dict)
     return dict
-#---------------配置区--------------------#
-username = ''
-password = ''
-#---------------配置区--------------------#
-#获取当前签到日期
+
+
+def sendEMail(content):
+    '''
+
+    :param content: 邮件内容
+    :return:
+    '''
+    # 发件人-填写自己的邮箱
+    userName_SendMail = ''
+    # 邮箱发件授权码-为发件人生成的授权码
+    userName_AuthCode = ''
+    # 定义邮件的接收者
+    received_mail = ['']
+    # 发送邮件
+    smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
+    smtp.send_msg()
+
+
+# ---------------配置区--------------------#
+username = '2020203706'
+password = 'Yang020611'
+# ---------------配置区--------------------#
+# 获取当前签到日期
 signin_time = datetime.datetime.now().date()
-#构造对应json文件路径
-json_file = 'Booking/'+ str(signin_time) +'.json'
+# 构造对应json文件路径
+json_file = 'Booking/' + str(signin_time) + '.json'
 dict = json_to_dict(json_file)
 
-#获取当前hour判断am or pm，从而输出正确的id
+# 获取当前hour判断am or pm，从而输出正确的id
 now_time = datetime.datetime.now().hour
 if (now_time < int(12)):
     id = dict[1]['am']
 else:
     id = dict[0]['pm']
-#如果获取的座位id为空，则停止运行
+# 如果获取的座位id为空，则停止运行
 if id == ' ':
     exit(0)
 
 seat = 100455976 + int(id)
-url = 'http://update.unifound.net/wxnotice/s.aspx?c=100455521_Seat_'+str(seat)+'_1KD'
+url = 'http://update.unifound.net/wxnotice/s.aspx?c=100455521_Seat_' + str(seat) + '_1KD'
 logger.info(f'座位ID为：{id}')
-#logger.info(f'换算网址为：{url}')
-#浏览器配置
+# logger.info(f'换算网址为：{url}')
+# 浏览器配置
 options = webdriver.ChromeOptions()
 options.add_argument('--headless')
 options.add_argument('--no-sandbox')
@@ -45,7 +66,6 @@ options.add_argument('--disable-dev-shm-usage')
 options.add_experimental_option('excludeSwitches', ['enable-automation'])
 options.add_experimental_option('useAutomationExtension', False)
 options.add_argument('--no-sandbox')
-#options.add_argument('--proxy-server=http://' + proxy)
 browser = webdriver.Chrome(options=options)
 browser.set_window_size(1920, 1080)
 browser.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
@@ -55,18 +75,17 @@ browser.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument', {
 # 记得写完整的url 包括http和https
 browser.get(url)
 
-
 browser.find_element(By.ID, 'username').send_keys(username)
 browser.find_element(By.ID, 'password').send_keys(password)
-browser.find_element(By.XPATH,'//*[@id="casLoginForm"]/div[4]/div/button').click()
+browser.find_element(By.XPATH, '//*[@id="casLoginForm"]/div[4]/div/button').click()
 logger.info("登录完成")
 
 try:
     browser.find_element(By.XPATH, '/html/body/div/div[3]/button').click()
-    # browser.get_screenshot_as_file('3.png')
     browser.close()
     logger.info("签到成功")
+    sendEMail(f'{str(signin_time)} 签到成功！')
 except:
-    logger.info("签到失败")
     browser.close()
-
+    logger.info("签到失败")
+    sendEMail(f'{str(signin_time)} 签到失败！')

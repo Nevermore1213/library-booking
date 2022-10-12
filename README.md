@@ -7,6 +7,7 @@
 - signin.py 签到功能
 - config.py 房间信息
 - Booking 预约成功后储存的信息
+- send_email.py 实现发送邮件功能
 
 Booking文件夹内储存了预约成功的时间段和座位id，文件格式为‘2022-xx-xx.json’
 
