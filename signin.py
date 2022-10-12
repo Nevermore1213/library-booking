@@ -34,8 +34,8 @@ def sendEMail(content):
 
 
 # ---------------配置区--------------------#
-username = '2020203706'
-password = 'Yang020611'
+username = ''
+password = ''
 # ---------------配置区--------------------#
 # 获取当前签到日期
 signin_time = datetime.datetime.now().date()
