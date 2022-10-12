@@ -3,7 +3,7 @@ from selenium.webdriver.common.by import By
 import logging
 import datetime
 import json
-import send_email
+import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -15,28 +15,8 @@ def json_to_dict(json_file):
     # print(dict)
     return dict
 
-
-def sendEMail(content):
-    '''
-
-    :param content: 邮件内容
-    :return:
-    '''
-    # 发件人-填写自己的邮箱
-    userName_SendMail = ''
-    # 邮箱发件授权码-为发件人生成的授权码
-    userName_AuthCode = ''
-    # 定义邮件的接收者
-    received_mail = ['']
-    # 发送邮件
-    smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
-    smtp.send_msg()
-
-
-# ---------------配置区--------------------#
-username = ''
-password = ''
-# ---------------配置区--------------------#
+username = config.username
+password = config.password
 # 获取当前签到日期
 signin_time = datetime.datetime.now().date()
 # 构造对应json文件路径
@@ -84,8 +64,8 @@ try:
     browser.find_element(By.XPATH, '/html/body/div/div[3]/button').click()
     browser.close()
     logger.info("签到成功")
-    sendEMail(f'{str(signin_time)} 签到成功！')
+    config.sendEMail(f'{str(signin_time)} 签到成功！')
 except:
     browser.close()
     logger.info("签到失败")
-    sendEMail(f'{str(signin_time)} 签到失败！')
+    config.sendEMail(f'{str(signin_time)} 签到失败！')

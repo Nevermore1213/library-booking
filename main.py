@@ -3,43 +3,25 @@ import logging
 import datetime
 import library
 import json
-import send_email
+import config
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 
 # ------------配置区----------------#
-def learn_time():
+def learn_time(*time_tuple):
     # 提前一天预约
     timestamp = (datetime.datetime.now() + datetime.timedelta(days=1)).date()
     # timestamp = (datetime.datetime.now() ).date()
-    learn_am = "9:00"
-    duration_am = 350
-    learn_pm = "15:00"
-    duration_pm = 350
+    learn_am = time_tuple[0]
+    duration_am = time_tuple[1]
+    learn_pm = time_tuple[2]
+    duration_pm = time_tuple[3]
     time_str = [[(str(timestamp) + ' ' + learn_pm), duration_pm, 'pm'],
                 [(str(timestamp) + ' ' + learn_am), duration_am, 'am']]
     return time_str
     # print(timestamp)
-
-
-def sendEMail(content):
-    '''
-
-    :param content: 邮件内容
-    :return:
-    '''
-    # 发件人-填写自己的邮箱
-    userName_SendMail = ''
-    # 邮箱发件授权码-为发件人生成的授权码
-    userName_AuthCode = ''
-    # 定义邮件的接收者
-    received_mail = ['']
-    #发送邮件
-    smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
-    smtp.send_msg()
-
 
 def save_json_file(log):
     '''
@@ -53,18 +35,15 @@ def save_json_file(log):
     with open(f'Booking/{booking_time}.json', 'w', encoding='utf-8') as f:
         f.write(txt)
     content = str(log)
-    sendEMail(f'预约成功！{booking_time} {content} ')
+    config.sendEMail(f'预约成功！{booking_time} {content} ')
 
 
 if __name__ == '__main__':
-    # 学号密码
-    username = ""
-    password = ""
-    # 想要的房间座位
-    room_id = 4
-    perfer_seat = []
-
-    time_str = learn_time()
+    username = config.username
+    password = config.password
+    room_id = config.room_id
+    perfer_seat = config.perfer_seat
+    time_str = learn_time(config.time_tuple)
     # -------------------------------#
     try:
         username = sys.argv[1]

@@ -2,10 +2,10 @@
 
 **qdu library booking and sign in**
 
-- main.py 预约主程序，在配置区填写账号密码，还有预约座位信息
+- main.py 预约主程序
 - library.py 实现登录，预约功能, 查询房间预约情况
 - signin.py 签到功能
-- config.py 房间信息
+- config.py 所有信息均在此处填写，房间信息
 - Booking 预约成功后储存的信息
 - send_email.py 实现发送邮件功能
 

@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 from MyUtil import *
 import config
 import logging
-import  datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
