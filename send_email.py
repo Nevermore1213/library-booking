@@ -53,11 +53,11 @@ if __name__ == '__main__':
 # # 邮箱服务端
 # mailserver = 'smtp.qq.com'
 # # 发件人-填写自己的邮箱
-# userName_SendMail = '3086151468@qq.com'
+# userName_SendMail = ''
 # # 邮箱发件授权码-为发件人生成的授权码
-# userName_AuthCode = 'pmjktlouptvgdege'
+# userName_AuthCode = ''
 # # 定义邮件的接收者-我随便写的，若收件人较多，可用列表表示
-# received_mail = ['2139511496@qq.com']
+# received_mail = ['']
 #
 # # 发送一封简单的邮件，处理邮件内容
 # content = '这是一封纯粹的文本信息内容！来自ITester软测试小栈的CoCo'
