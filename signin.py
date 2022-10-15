@@ -64,8 +64,12 @@ try:
     browser.find_element(By.XPATH, '/html/body/div/div[3]/button').click()
     browser.close()
     logger.info("签到成功")
-    config.sendEMail(f'{str(signin_time)} 签到成功！')
+    subject = f'签到成功，座位ID{id}'
+    content = f'{str(signin_time)}'
+    config.sendEMail(subject, content)
 except:
     browser.close()
     logger.info("签到失败")
-    config.sendEMail(f'{str(signin_time)} 签到失败！')
+    subject = f'签到失败！'
+    content = f'{str(signin_time)}'
+    config.sendEMail(subject, content)

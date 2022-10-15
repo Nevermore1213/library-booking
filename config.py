@@ -1,29 +1,32 @@
 import send_email
 
-def sendEMail(content):
+def sendEMail(subject,content):
     '''
 
     :param content: 邮件内容
     :return:
     '''
-    # 发件人-填写自己的邮箱
-    userName_SendMail = ''
-    # 邮箱发件授权码-为发件人生成的授权码
-    userName_AuthCode = ''
-    # 定义邮件的接收者
-    received_mail = ['']
-    #发送邮件
-    smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
-    smtp.send_msg()
+    try:
+        # 发件人-填写自己的邮箱
+        userName_SendMail = '3086151468@qq.com'
+        # 邮箱发件授权码-为发件人生成的授权码
+        userName_AuthCode = 'pmjktlouptvgdege'
+        # 定义邮件的接收者
+        received_mail = ['2139511496@qq.com']
+        # 发送邮件
+        smtp = send_email.SendMsg(userName_SendMail, received_mail, userName_AuthCode)
+        smtp.send_msg(subject, content)
+    except:
+        print('邮件发送失败！')
 
 #用户名
-username = ''
+username = '16605407609'
 #密码
 password = ''
 #预约房间
 room_id = 4
 #优先座位
-perfer_seat = []
+perfer_seat = [120]
 #元组 按顺序依次为上午预约时间、上午预约持续时间、下午预约时间、下午预约持续时间，可填空字符串
 time_tuple = ("9:00", 350, "15:00", 350)
 '''

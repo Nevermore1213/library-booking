@@ -35,7 +35,8 @@ def save_json_file(log):
     with open(f'Booking/{booking_time}.json', 'w', encoding='utf-8') as f:
         f.write(txt)
     content = str(log)
-    config.sendEMail(f'预约成功！{booking_time} {content} ')
+    subject = f'{booking_time},预约成功'
+    config.sendEMail(subject, content)
 
 
 if __name__ == '__main__':

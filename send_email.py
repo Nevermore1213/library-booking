@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class SendMsg:
-    def __init__(self, userName_SendMail, received_mail, userName_AuthCode, content):
+    def __init__(self, userName_SendMail, received_mail, userName_AuthCode):
         '''
 
         :param userName_SendMail: 发件人
@@ -19,15 +19,14 @@ class SendMsg:
         self.userName_SendMail = userName_SendMail
         self.received_mail = received_mail
         self.userName_AuthCode = userName_AuthCode
-        self.content = content
 
-    def send_msg(self):
+    def send_msg(self,subject, content):
         # 邮箱属性配置
         # 邮箱服务端
         mailserver = 'smtp.qq.com'
         # 纯文本形式的邮件内容的定义，通过MIMEText进行操作，plain为默认的文本的展示形式
-        email = MIMEText(self.content, 'plain', 'utf-8')
-        email['Subject'] = '图书馆预约'  # 定义邮件主题
+        email = MIMEText(content, 'plain', 'utf-8')
+        email['Subject'] = subject  # 定义邮件主题
         email['From'] = self.userName_SendMail  # 发件人
         email['To'] = ','.join(self.received_mail)  # 收件人（可以添加多个，若只有一个收件人，可直接写邮箱号）
         # 发送邮件
@@ -39,6 +38,7 @@ class SendMsg:
         logger.info('邮件发送成功')
 
 
+
 if __name__ == '__main__':
     # 发件人-填写自己的邮箱
     userName_SendMail = ''
@@ -47,8 +47,7 @@ if __name__ == '__main__':
     # 定义邮件的接收者
     received_mail = ['']
     content = ' '
-    smtp = SendMsg(userName_SendMail, received_mail, userName_AuthCode, content)
-    smtp.send_msg()
+    smtp = SendMsg(userName_SendMail, received_mail, userName_AuthCode)
 # # 邮箱属性配置
 # # 邮箱服务端
 # mailserver = 'smtp.qq.com'
