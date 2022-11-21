@@ -203,15 +203,36 @@ class Person:
         logger.info(response.text)
 
     def queryHistory(self):
+        '''
+
+        :return: list0列表中第一项是已预约的信息，第二项是正在生效的信息 rscIds 是预约的序列id 可用于之后的预约取消
+        '''
         logger.info("正在查询历史 rsvId: ")
         response = self.session.get(
             f"http://csyy.qdu.edu.cn:8080/ClientWeb/pro/ajax/center.aspx?act=get_History_resv&StatFlag=New&_={int(time.time() * 1000)}")
         msg = json.loads(response.text)['msg']
         rsvIds = re.findall("rsvId='(.*?)' onclick='", msg)
+        rsvTime = re.sub('\\<.*?>', " ", msg)
+        list = rsvTime.split(None)
+        for l in list:
+            if l == ',':
+                list.remove(l)
+        str = ''
+        list0 = []
+        for l in list:
+            if l != '已生效':
+                if l != '取消':
+                    str += l + " "
+                else:
+                    str += '\n'
+            else:
+                list0.append(str)
+                str = ''
         logger.info(rsvIds)
-        return rsvIds
+        return [list0, rsvIds]
 
     def deleteSeat(self, rsvId):
+        #TODO 查询函数发生了一下变化 需要修改一下，另外添加一下自主选择取消预约的功能
         logger.info(f"正在删除 {rsvId}")
         response = self.session.get(
             f"http://csyy.qdu.edu.cn:8080/ClientWeb/pro/ajax/reserve.aspx?act=del_resv&id={rsvId}&_={int(time.time() * 1000)}")
@@ -250,6 +271,7 @@ class Person:
     # if len(rsvIds) > 0:
     #     person.deleteSeat(rsvIds[0]) # 删除刚刚的预约
 if __name__ == '__main__':
-    test = Person('', '', 4)
+    test = Person()
     test.login()
-    test.getInfo(4)
+    print(test.queryHistory()[0])
+    # test.getInfo(4)
